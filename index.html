@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>我的音樂播放器</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Serif TC', serif;
+      background: url("IMG_9452.JPG") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    h1 {
+      text-align: center;
+      color: purple;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      margin-top: 20px;
+    }
+
+    .player-container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 15px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: purple;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: darkviolet;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background: rgba(200, 162, 200, 0.3);
+      border-radius: 8px;
+    }
+
+    .active {
+      font-weight: bold;
+      color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <h1>我的音樂播放器</h1>
+  <div class="player-container">
+    <audio id="player" controls></audio>
+    <div style="text-align: center;">
+      <button onclick="prevSong()">上一首</button>
+      <button onclick="nextSong()">下一首</button>
+    </div>
+    <ul id="playlist"></ul>
+  </div>
+
+  <script>
+    const songs = [
+      {file: "01 曲目 1.mp3", title: "心雨"},
+      {file: "02 曲目 2.mp3", title: "第二首"},
+      {file: "03 曲目 3.mp3", title: "藍色的夢"},
+      {file: "04 曲目 4.mp3", title: "九十九朵紅"},
+      {file: "05 曲目 5.mp3", title: "想當初見到你"},
+      {file: "06 曲目 6.mp3", title: "希望"},
+      {file: "07 曲目 7.mp3", title: "吹著春日風"},
+      {file: "08 曲目 8.mp3", title: "給我一個吻"},
+      {file: "09 曲目 9.mp3", title: "真的好想你"},
+      {file: "10 曲目 10.mp3", title: "初戀女"},
+      {file: "11 曲目 11.mp3", title: "日夜不停想著你"},
+      {file: "12 曲目 12.mp3", title: "玫瑰玫瑰我愛你"}
+    ];
+
+    let current = 0;
+    const audio = document.getElementById("player");
+    const list = document.getElementById("playlist");
+
+    songs.forEach((s, i) => {
+      const li = document.createElement("li");
+      li.textContent = (i+1).toString().padStart(2,"0") + " " + s.title;
+      li.onclick = () => { loadSong(i); audio.play(); };
+      list.appendChild(li);
+    });
+
+    function loadSong(i) {
+      current = i;
+      audio.src = songs[i].file;
+      document.querySelectorAll("#playlist li").forEach((li, idx) => {
+        li.classList.toggle("active", idx === i);
+      });
+    }
+
+    function nextSong() {
+      current = (current + 1) % songs.length;
+      loadSong(current);
+      audio.play();
+    }
+
+    function prevSong() {
+      current = (current - 1 + songs.length) % songs.length;
+      loadSong(current);
+      audio.play();
+    }
+
+    loadSong(current);
+  </script>
+</body>
+</html>
