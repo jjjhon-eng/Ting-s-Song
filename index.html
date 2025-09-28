@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>我的音樂播放器</title>
+  <title>鄭丁培芳的歌</title>
   <style>
     body {
       font-family: "Noto Serif TC", serif;
@@ -23,12 +23,18 @@
     }
 
     .player {
-      width: 70%;  
+      width: 60%;
       margin: 20px auto;
-      background: rgba(255, 255, 255, 0.7); /* 半透明 */
+      background: rgba(255, 255, 255, 0.7);
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .player {
+        width: 80%;
+      }
     }
 
     audio {
@@ -74,16 +80,17 @@
   </style>
 </head>
 <body>
-  <h1>我的音樂播放器</h1>
+  <h1>鄭丁培芳的歌</h1>
 
   <div class="player">
-    <audio id="audio" controls>
+    <audio id="audio">
       <source src="01 曲目 1.mp3" type="audio/mpeg">
       你的瀏覽器不支援 audio。
     </audio>
 
     <div class="controls">
       <button onclick="prevSong()">上一首</button>
+      <button onclick="togglePlay()">播放 / 暫停</button>
       <button onclick="stopSong()">Stop</button>
       <button onclick="nextSong()">下一首</button>
     </div>
@@ -150,7 +157,15 @@
 
     function stopSong() {
       audio.pause();
-      audio.currentTime = 0;
+      audio.currentTime = 0;  // 歸零
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
     }
 
     function playSong(index) {
@@ -159,7 +174,6 @@
 
     audio.addEventListener("ended", nextSong);
 
-    // 初始化
     updateActiveSong();
   </script>
 </body>
