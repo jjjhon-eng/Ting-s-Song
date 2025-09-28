@@ -1,135 +1,220 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>我的音樂播放器</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Noto Serif TC', serif;
-      background: url("IMG_9452.JPG") no-repeat center center fixed;
-      background-size: cover;
+    /* ====== 全局 ====== */
+    :root{
+      --violet:#7b1e7a;
+      --violet-dark:#5c165c;
+      --card-bg: rgba(255,255,255,.82);
+      --glass: blur(8px) saturate(120%);
+      /* 自適應字級：手機較大、桌機不會太大 */
+      --title-size: clamp(22px, 6vw, 32px);
+      --list-size:  clamp(17px, 4.8vw, 22px);
+      --btn-size:   clamp(14px, 4.2vw, 18px);
+      --num-size:   clamp(14px, 3.8vw, 16px);
+    }
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family: system-ui, "PingFang TC", "Noto Sans TC", sans-serif;
+      color:#333;
+      min-height:100svh;
+      /* 背景圖 */
+      background: #efe9f8 url("IMG_9452.JPG") center/cover no-repeat fixed;
     }
 
-    h1 {
-      text-align: center;
-      color: purple;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-      margin-top: 20px;
+    /* 版心容器：手機 92vw、最大 760px */
+    .wrap{
+      width:min(92vw, 760px);
+      margin:6vh auto 8vh;
     }
 
-    .player-container {
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    /* 標題 */
+    h1{
+      margin:0 0 16px;
+      text-align:center;
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--violet);
+      font-size:var(--title-size);
+      text-shadow:0 2px 10px rgba(123,30,122,.15);
     }
 
-    audio {
-      width: 100%;
-      margin-bottom: 15px;
+    /* 卡片（玻璃擬態） */
+    .card{
+      background:var(--card-bg);
+      backdrop-filter:var(--glass);
+      -webkit-backdrop-filter:var(--glass);
+      border-radius:16px;
+      box-shadow:0 12px 28px rgba(0,0,0,.12);
+      overflow:visible; /* 確保不裁掉播放器邊緣 */
+      padding:16px 16px 10px;
     }
 
-    button {
-      margin: 5px;
-      padding: 8px 15px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      background: purple;
-      color: white;
-      cursor: pointer;
+    /* 播放器列 */
+    .player-row{
+      position:sticky; /* 卡片內固定在頂端，滾動也不會被文字擋到 */
+      top:0;
+      background:linear-gradient(to bottom, rgba(255,255,255,.95), rgba(255,255,255,.6));
+      padding:10px 10px 12px;
+      border-radius:12px;
+      z-index:2;
+    }
+    audio{
+      width:100%;
+      height:auto; /* 交給瀏覽器自調，避免被裁切 */
+      display:block;
     }
 
-    button:hover {
-      background: darkviolet;
+    /* 上/下一首 */
+    .nav{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      margin:12px 0 2px;
+    }
+    .nav button{
+      font-size:var(--btn-size);
+      padding:.6em 1.2em;
+      border:0;
+      border-radius:10px;
+      background:var(--violet);
+      color:#fff;
+      cursor:pointer;
+      box-shadow:0 6px 14px rgba(123,30,122,.25);
+      transition:transform .08s ease, background .15s ease;
+      touch-action:manipulation;
+    }
+    .nav button:active{ transform:translateY(1px); }
+    .nav button:hover{ background:var(--violet-dark); }
+
+    /* 播放清單 */
+    ol#playlist{
+      list-style:none;
+      margin:10px 0 6px;
+      padding:0;
+    }
+    #playlist li{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:8px;
+      font-size:var(--list-size);
+      line-height:1.5;
+      color:#333;
+      transition:background .15s ease, color .15s ease;
+      cursor:pointer;
+    }
+    #playlist li .no{
+      width:2.5em;
+      text-align:right;
+      color:#777;
+      font-variant-numeric: tabular-nums;
+      font-size:var(--num-size);
+      flex:none;
+    }
+    #playlist li .title{
+      flex:1 1 auto;
+      min-width:0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    #playlist li:hover{
+      background:rgba(123,30,122,.08);
+    }
+    #playlist li.active{
+      background:rgba(123,30,122,.14);
+      color:var(--violet-dark);
+      font-weight:700;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      padding: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    li:hover {
-      background: rgba(200, 162, 200, 0.3);
-      border-radius: 8px;
-    }
-
-    .active {
-      font-weight: bold;
-      color: darkred;
+    /* 手機再微調：讓清單更好點 */
+    @media (max-width:480px){
+      .wrap{ margin:4vh auto 6vh; }
+      .player-row{ padding:12px 10px 14px; }
+      .nav{ gap:12px; }
+      #playlist li{ padding:12px 12px; }
     }
   </style>
 </head>
 <body>
-  <h1>我的音樂播放器</h1>
-  <div class="player-container">
-    <audio id="player" controls></audio>
-    <div style="text-align: center;">
-      <button onclick="prevSong()">上一首</button>
-      <button onclick="nextSong()">下一首</button>
+  <div class="wrap">
+    <h1>我的音樂播放器</h1>
+
+    <div class="card">
+      <!-- 播放器列（不會被遮到） -->
+      <div class="player-row">
+        <audio id="player" controls preload="metadata"></audio>
+        <div class="nav">
+          <button type="button" onclick="prevSong()">上一首</button>
+          <button type="button" onclick="nextSong()">下一首</button>
+        </div>
+      </div>
+
+      <!-- 清單 -->
+      <ol id="playlist"></ol>
     </div>
-    <ul id="playlist"></ul>
   </div>
 
   <script>
+    // ====== 歌曲清單（檔名需與資料夾一致） ======
     const songs = [
-      {file: "01 曲目 1.mp3", title: "心雨"},
-      {file: "02 曲目 2.mp3", title: "第二首"},
-      {file: "03 曲目 3.mp3", title: "藍色的夢"},
-      {file: "04 曲目 4.mp3", title: "九十九朵紅"},
-      {file: "05 曲目 5.mp3", title: "想當初見到你"},
-      {file: "06 曲目 6.mp3", title: "希望"},
-      {file: "07 曲目 7.mp3", title: "吹著春日風"},
-      {file: "08 曲目 8.mp3", title: "給我一個吻"},
-      {file: "09 曲目 9.mp3", title: "真的好想你"},
-      {file: "10 曲目 10.mp3", title: "初戀女"},
-      {file: "11 曲目 11.mp3", title: "日夜不停想著你"},
-      {file: "12 曲目 12.mp3", title: "玫瑰玫瑰我愛你"}
+      {file:"01 曲目 1.mp3",  title:"心雨"},
+      {file:"02 曲目 2.mp3",  title:"第二首"},
+      {file:"03 曲目 3.mp3",  title:"藍色的夢"},
+      {file:"04 曲目 4.mp3",  title:"九九九朵紅"},
+      {file:"05 曲目 5.mp3",  title:"想著初見到你"},
+      {file:"06 曲目 6.mp3",  title:"希望"},
+      {file:"07 曲目 7.mp3",  title:"吹著春日風"},
+      {file:"08 曲目 8.mp3",  title:"給我一個吻"},
+      {file:"09 曲目 9.mp3",  title:"真的好想你"},
+      {file:"10 曲目 10.mp3", title:"初戀女"},
+      {file:"11 曲目 11.mp3", title:"日夜不悔想著你"},
+      {file:"12 曲目 12.mp3", title:"玫瑰玫瑰我愛你"}
     ];
 
     let current = 0;
-    const audio = document.getElementById("player");
-    const list = document.getElementById("playlist");
+    const audio = document.getElementById('player');
+    const list  = document.getElementById('playlist');
 
+    // 動態建立清單
     songs.forEach((s, i) => {
-      const li = document.createElement("li");
-      li.textContent = (i+1).toString().padStart(2,"0") + " " + s.title;
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="no">${String(i+1).padStart(2,'0')}</span>
+                      <span class="title">${s.title}</span>`;
       li.onclick = () => { loadSong(i); audio.play(); };
       list.appendChild(li);
     });
 
-    function loadSong(i) {
+    function loadSong(i){
       current = i;
       audio.src = songs[i].file;
-      document.querySelectorAll("#playlist li").forEach((li, idx) => {
-        li.classList.toggle("active", idx === i);
+      // 高亮目前曲目
+      document.querySelectorAll('#playlist li').forEach((li, idx) => {
+        li.classList.toggle('active', idx === i);
       });
     }
 
-    function nextSong() {
+    function nextSong(){
       current = (current + 1) % songs.length;
       loadSong(current);
       audio.play();
     }
-
-    function prevSong() {
+    function prevSong(){
       current = (current - 1 + songs.length) % songs.length;
       loadSong(current);
       audio.play();
     }
 
-    loadSong(current);
+    // 初始載入第 1 首
+    loadSong(0);
   </script>
 </body>
 </html>
