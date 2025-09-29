@@ -28,119 +28,82 @@
       padding: 0;
       color: #333;
     }
-    h1 {
-      margin: 20px 0;
-      color: #800080;
-    }
-    .player-container {
-      background: rgba(255, 255, 255, 0.7); /* 半透明白色 */
-      border-radius: 15px;
+    h1 { margin: 20px 0; color: #800080; }
+    .player-container{
+      background: rgba(255,255,255,.72);
+      border-radius: 16px;
       display: inline-block;
-      padding: 15px 25px;
+      padding: 16px 24px;
       margin: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 16px rgba(0,0,0,.18);
     }
-    audio {
-      width: 100%;
-      margin-bottom: 10px;
+    audio{ width:100%; margin-bottom:12px; }
+    .controls button{
+      background: purple; color:#fff; border:0;
+      padding:10px 20px; margin:5px; border-radius:8px; cursor:pointer; font-size:16px;
     }
-    .controls button {
-      background-color: purple;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .controls button:hover {
-      background-color: #a020f0;
-    }
-    .playlist {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0 0 0;
-      text-align: left;
-    }
-    .playlist li {
-      padding: 5px;
-      cursor: pointer;
-    }
-    .playlist li.active {
-      color: red;
-      font-weight: bold;
-    }
+    .controls button:hover{ background:#a020f0; }
+    .playlist{ list-style:none; padding:0; margin:10px 0 0; text-align:left; }
+    .playlist li{ padding:6px 4px; cursor:pointer; }
+    .playlist li.active{ color:#d00; font-weight:700; }
   </style>
 </head>
 <body>
   <h1>鄭丁培芳的歌</h1>
   <div class="player-container">
     <audio id="audioPlayer" controls>
-      <source src="01 自首 1.mp3" type="audio/mpeg">
+      <source src="01 曲目 1.mp3" type="audio/mpeg" />
       您的瀏覽器不支援 audio 播放。
     </audio>
+
     <div class="controls">
       <button onclick="prevSong()">上一首</button>
       <button onclick="stopSong()">Stop</button>
       <button onclick="nextSong()">下一首</button>
     </div>
+
     <ul class="playlist" id="playlist">
       <li onclick="playSong(0)">心雨</li>
       <li onclick="playSong(1)">第二首</li>
       <li onclick="playSong(2)">藍色的夢</li>
       <li onclick="playSong(3)">九九九朵紅</li>
-      <li onclick="playSong(4)">想着初見到你</li>
+      <li onclick="playSong(4)">想著初見到你</li>
       <li onclick="playSong(5)">希望</li>
       <li onclick="playSong(6)">吹著春日風</li>
       <li onclick="playSong(7)">給我一個吻</li>
       <li onclick="playSong(8)">真的好想你</li>
       <li onclick="playSong(9)">初戀女</li>
-      <li onclick="playSong(10)">日夜不想着你</li>
+      <li onclick="playSong(10)">日夜不想著你</li>
       <li onclick="playSong(11)">玫瑰玫瑰我愛你</li>
     </ul>
   </div>
 
   <script>
     const songs = [
-      "01 自首 1.mp3","02 自首 2.mp3","03 自首 3.mp3","04 自首 4.mp3",
-      "05 自首 5.mp3","06 自首 6.mp3","07 自首 7.mp3","08 自首 8.mp3",
-      "09 自首 9.mp3","10 自首 10.mp3","11 自首 11.mp3","12 自首 12.mp3"
+      "01 曲目 1.mp3","02 曲目 2.mp3","03 曲目 3.mp3","04 曲目 4.mp3",
+      "05 曲目 5.mp3","06 曲目 6.mp3","07 曲目 7.mp3","08 曲目 8.mp3",
+      "09 曲目 9.mp3","10 曲目 10.mp3","11 曲目 11.mp3","12 曲目 12.mp3"
     ];
+
     let currentSong = 0;
     const audioPlayer = document.getElementById("audioPlayer");
-    const playlist = document.getElementById("playlist").getElementsByTagName("li");
+    const playlistEls = document.getElementById("playlist").getElementsByTagName("li");
 
-    function loadSong(index) {
-      audioPlayer.src = songs[index];
+    function loadSong(i){
+      audioPlayer.src = songs[i];
       audioPlayer.play();
-      updateActive(index);
+      updateActive(i);
     }
-    function playSong(index) {
-      currentSong = index;
-      loadSong(index);
-    }
-    function nextSong() {
-      currentSong = (currentSong + 1) % songs.length;
-      loadSong(currentSong);
-    }
-    function prevSong() {
-      currentSong = (currentSong - 1 + songs.length) % songs.length;
-      loadSong(currentSong);
-    }
-    function stopSong() {
-      audioPlayer.pause();
-      audioPlayer.currentTime = 0; // 回到 0:00
-      updateActive(currentSong);
-    }
-    function updateActive(index) {
-      for (let i = 0; i < playlist.length; i++) {
-        playlist[i].classList.remove("active");
-      }
-      playlist[index].classList.add("active");
+    function playSong(i){ currentSong = i; loadSong(i); }
+    function nextSong(){ currentSong = (currentSong+1)%songs.length; loadSong(currentSong); }
+    function prevSong(){ currentSong = (currentSong-1+songs.length)%songs.length; loadSong(currentSong); }
+    function stopSong(){ audioPlayer.pause(); audioPlayer.currentTime = 0; }
+    function updateActive(i){
+      for(let k=0;k<playlistEls.length;k++) playlistEls[k].classList.remove("active");
+      if(playlistEls[i]) playlistEls[i].classList.add("active");
     }
     // 初始化
-    loadSong(currentSong);
+    updateActive(currentSong);
   </script>
 </body>
 </html>
