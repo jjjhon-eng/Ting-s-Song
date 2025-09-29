@@ -18,7 +18,7 @@
       margin-top: 20px;
     }
     .player {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.65); /* 半透明 */
       border-radius: 12px;
       padding: 20px;
       margin: 20px auto;
@@ -34,20 +34,33 @@
       align-items: center;
     }
     .controls div {
-      margin: 5px 0;
+      margin: 6px 0;
     }
     button {
       background-color: purple;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 18px;
       margin: 3px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
     }
     button:hover {
       background-color: darkmagenta;
+    }
+    .stop-btn {
+      background-color: red;      /* Stop 按鈕紅色 */
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px 40px;         /* 放大 Stop */
+      margin-top: 8px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .stop-btn:hover {
+      background-color: darkred; /* 滑鼠移上更深紅 */
     }
     ul {
       list-style: none;
@@ -77,7 +90,7 @@
         <button onclick="nextSong()">下一首</button>
       </div>
       <div>
-        <button onclick="stopSong()">Stop</button>
+        <button class="stop-btn" onclick="stopSong()">Stop</button>
       </div>
     </div>
 
