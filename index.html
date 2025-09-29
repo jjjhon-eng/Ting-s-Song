@@ -4,106 +4,110 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>鄭丁培芳的歌</title>
-
-  <!-- Open Graph for WhatsApp/FB 預覽 -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="鄭丁培芳的歌" />
-  <meta property="og:description" content="12 首懷念的歌曲｜手機也能播放、切歌、停止" />
-  <meta property="og:url" content="https://jjjhon-eng.github.io/Ting-s-Song/" />
-  <meta property="og:image" content="https://jjjhon-eng.github.io/Ting-s-Song/IMG_9452.JPG" />
-
-  <!-- Twitter Cards -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="鄭丁培芳的歌" />
-  <meta name="twitter:description" content="12 首懷念的歌曲｜手機也能播放、切歌、停止" />
-  <meta name="twitter:image" content="https://jjjhon-eng.github.io/Ting-s-Song/IMG_9452.JPG" />
-
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: url('IMG_9452.JPG') no-repeat center center fixed;
-      background-size: cover;
-      text-align: center;
       margin: 0;
-      padding: 0;
-      color: #333;
+      font-family: Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: url("IMG_9452.JPG") no-repeat center/cover fixed;
+      text-align: center;
     }
-    h1 { margin: 20px 0; color: #800080; }
-    .player-container{
-      background: rgba(255,255,255,.72);
-      border-radius: 16px;
+    h1 {
+      margin: 20px 0;
+      color: #800080;
+    }
+    .player {
       display: inline-block;
-      padding: 16px 24px;
-      margin: 20px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.18);
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.75);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    audio{ width:100%; margin-bottom:12px; }
-    .controls button{
-      background: purple; color:#fff; border:0;
-      padding:10px 20px; margin:5px; border-radius:8px; cursor:pointer; font-size:16px;
+    audio { width: 100%; margin-bottom: 12px; }
+    .controls button {
+      margin: 4px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: purple;
+      color: #fff;
+      cursor: pointer;
     }
-    .controls button:hover{ background:#a020f0; }
-    .playlist{ list-style:none; padding:0; margin:10px 0 0; text-align:left; }
-    .playlist li{ padding:6px 4px; cursor:pointer; }
-    .playlist li.active{ color:#d00; font-weight:700; }
+    .controls button:hover { background: #a020f0; }
+    ul { list-style: none; padding: 0; margin: 10px 0 0; text-align: left; }
+    li { padding: 6px; cursor: pointer; }
+    li.active { color: red; font-weight: bold; }
+    .hint { margin-top: 8px; font-size: 14px; color: #444; }
   </style>
 </head>
 <body>
   <h1>鄭丁培芳的歌</h1>
-  <div class="player-container">
-    <audio id="audioPlayer" controls>
-      <source src="01 曲目 1.mp3" type="audio/mpeg" />
-      您的瀏覽器不支援 audio 播放。
-    </audio>
-
+  <div class="player">
+    <audio id="audio" controls>您的瀏覽器不支援 audio 播放。</audio>
     <div class="controls">
       <button onclick="prevSong()">上一首</button>
       <button onclick="stopSong()">Stop</button>
       <button onclick="nextSong()">下一首</button>
     </div>
-
-    <ul class="playlist" id="playlist">
-      <li onclick="playSong(0)">心雨</li>
-      <li onclick="playSong(1)">第二首</li>
-      <li onclick="playSong(2)">藍色的夢</li>
-      <li onclick="playSong(3)">九九九朵紅</li>
-      <li onclick="playSong(4)">想著初見到你</li>
-      <li onclick="playSong(5)">希望</li>
-      <li onclick="playSong(6)">吹著春日風</li>
-      <li onclick="playSong(7)">給我一個吻</li>
-      <li onclick="playSong(8)">真的好想你</li>
-      <li onclick="playSong(9)">初戀女</li>
-      <li onclick="playSong(10)">日夜不想著你</li>
-      <li onclick="playSong(11)">玫瑰玫瑰我愛你</li>
+    <ul id="playlist">
+      <li onclick="playSong(0)">王昭君</li>
+      <li onclick="playSong(1)">心雨</li>
+      <li onclick="playSong(2)">第二春</li>
+      <li onclick="playSong(3)">藍色的夢</li>
+      <li onclick="playSong(4)">九九女兒紅</li>
+      <li onclick="playSong(5)">想當初見到你</li>
+      <li onclick="playSong(6)">冬戀</li>
+      <li onclick="playSong(7)">你是春日風</li>
+      <li onclick="playSong(8)">給我一個吻</li>
+      <li onclick="playSong(9)">真的好想你</li>
+      <li onclick="playSong(10)">初戀女</li>
+      <li onclick="playSong(11)">白天不懂夜的黑（林葆誠 男）</li>
     </ul>
+    <div class="hint" id="hint"></div>
   </div>
 
   <script>
-    const songs = [
-      "01 曲目 1.mp3","02 曲目 2.mp3","03 曲目 3.mp3","04 曲目 4.mp3",
-      "05 曲目 5.mp3","06 曲目 6.mp3","07 曲目 7.mp3","08 曲目 8.mp3",
-      "09 曲目 9.mp3","10 曲目 10.mp3","11 曲目 11.mp3","12 曲目 12.mp3"
+    const candidates = idx => [
+      ${String(idx+1).padStart(2,'0')}.mp3,
+      ${String(idx+1).padStart(2,'0')} 曲目 ${idx+1}.mp3
     ];
+    const titles = [
+      "王昭君","心雨","第二春","藍色的夢","九九女兒紅","想當初見到你",
+      "冬戀","你是春日風","給我一個吻","真的好想你","初戀女","白天不懂夜的黑（林葆誠 男）"
+    ];
+    const audio = document.getElementById("audio");
+    const listItems = document.querySelectorAll("#playlist li");
+    const hint = document.getElementById("hint");
+    let current = 0, resolved = new Array(titles.length).fill(null);
 
-    let currentSong = 0;
-    const audioPlayer = document.getElementById("audioPlayer");
-    const playlistEls = document.getElementById("playlist").getElementsByTagName("li");
-
-    function loadSong(i){
-      audioPlayer.src = songs[i];
-      audioPlayer.play();
-      updateActive(i);
+    async function checkUrl(u){
+      try{ const r=await fetch(encodeURI(u),{method:"HEAD"}); if(r.ok) return encodeURI(u);}catch(e){}
+      return null;
     }
-    function playSong(i){ currentSong = i; loadSong(i); }
-    function nextSong(){ currentSong = (currentSong+1)%songs.length; loadSong(currentSong); }
-    function prevSong(){ currentSong = (currentSong-1+songs.length)%songs.length; loadSong(currentSong); }
-    function stopSong(){ audioPlayer.pause(); audioPlayer.currentTime = 0; }
-    function updateActive(i){
-      for(let k=0;k<playlistEls.length;k++) playlistEls[k].classList.remove("active");
-      if(playlistEls[i]) playlistEls[i].classList.add("active");
+    async function getSrc(i){
+      if(resolved[i]) return resolved[i];
+      for(const name of candidates(i)){
+        const u = await checkUrl(name);
+        if(u){ resolved[i]=u; return u; }
+      }
+      return null;
     }
-    // 初始化
-    updateActive(currentSong);
+    function mark(i){
+      listItems.forEach((li,k)=> li.classList.toggle("active",k===i));
+    }
+    async function load(i){
+      current=(i+titles.length)%titles.length;
+      hint.textContent="載入中："+titles[current];
+      const src=await getSrc(current);
+      if(!src){ hint.textContent="檔案不存在："+titles[current]; return; }
+      audio.src=src; audio.play().catch(()=>{});
+      mark(current); hint.textContent=titles[current];
+    }
+    function playSong(i){ load(i); }
+    function nextSong(){ load(current+1); }
+    function prevSong(){ load(current-1); }
+    function stopSong(){ audio.pause(); audio.currentTime=0; }
+    audio.addEventListener("ended",()=> nextSong());
+    load(0);
   </script>
 </body>
 </html>
