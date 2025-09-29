@@ -44,17 +44,12 @@
       width: 100%;
       margin-bottom: 10px;
     }
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 10px 0;
-    }
     .controls button {
       background-color: purple;
       border: none;
       color: white;
       padding: 10px 20px;
+      margin: 5px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
@@ -82,7 +77,7 @@
   <h1>鄭丁培芳的歌</h1>
   <div class="player-container">
     <audio id="audioPlayer" controls>
-      <source src="songs/song1.mp3" type="audio/mpeg">
+      <source src="01 自首 1.mp3" type="audio/mpeg">
       您的瀏覽器不支援 audio 播放。
     </audio>
     <div class="controls">
@@ -108,9 +103,9 @@
 
   <script>
     const songs = [
-      "songs/song1.mp3","songs/song2.mp3","songs/song3.mp3","songs/song4.mp3",
-      "songs/song5.mp3","songs/song6.mp3","songs/song7.mp3","songs/song8.mp3",
-      "songs/song9.mp3","songs/song10.mp3","songs/song11.mp3","songs/song12.mp3"
+      "01 自首 1.mp3","02 自首 2.mp3","03 自首 3.mp3","04 自首 4.mp3",
+      "05 自首 5.mp3","06 自首 6.mp3","07 自首 7.mp3","08 自首 8.mp3",
+      "09 自首 9.mp3","10 自首 10.mp3","11 自首 11.mp3","12 自首 12.mp3"
     ];
     let currentSong = 0;
     const audioPlayer = document.getElementById("audioPlayer");
