@@ -1,163 +1,144 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>鄭丁培芳的歌</title>
+
+  <!-- Open Graph for WhatsApp/FB 預覽 -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="鄭丁培芳的歌" />
+  <meta property="og:description" content="12 首懷念的歌曲｜手機也能播放、切歌、停止" />
+  <meta property="og:url" content="https://jjjhon-eng.github.io/Ting-s-Song/" />
+  <meta property="og:image" content="https://jjjhon-eng.github.io/Ting-s-Song/IMG_9452.JPG" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="鄭丁培芳的歌" />
+  <meta name="twitter:description" content="12 首懷念的歌曲｜手機也能播放、切歌、停止" />
+  <meta name="twitter:image" content="https://jjjhon-eng.github.io/Ting-s-Song/IMG_9452.JPG" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: url("background.jpg") no-repeat center center fixed;
+      background: url('IMG_9452.JPG') no-repeat center center fixed;
       background-size: cover;
+      text-align: center;
       margin: 0;
       padding: 0;
-      text-align: center;
+      color: #333;
     }
-    h2 {
-      color: purple;
-      margin-top: 20px;
+    h1 {
+      margin: 20px 0;
+      color: #800080;
     }
-    .player {
-      background: rgba(255, 255, 255, 0.65); /* 半透明 */
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px auto;
-      width: 320px;
+    .player-container {
+      background: rgba(255, 255, 255, 0.7); /* 半透明白色 */
+      border-radius: 15px;
+      display: inline-block;
+      padding: 15px 25px;
+      margin: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     audio {
       width: 100%;
       margin-bottom: 10px;
     }
-    .controls {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .controls div {
-      margin: 6px 0;
-    }
-    button {
+    .controls button {
       background-color: purple;
-      color: white;
       border: none;
-      padding: 10px 18px;
-      margin: 3px;
-      border-radius: 6px;
+      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 16px;
     }
-    button:hover {
-      background-color: darkmagenta;
+    .controls button:hover {
+      background-color: #a020f0;
     }
-    .stop-btn {
-      background-color: red;      /* Stop 按鈕紅色 */
-      font-size: 18px;
-      font-weight: bold;
-      padding: 12px 40px;         /* 放大 Stop */
-      margin-top: 8px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .stop-btn:hover {
-      background-color: darkred; /* 滑鼠移上更深紅 */
-    }
-    ul {
+    .playlist {
       list-style: none;
       padding: 0;
       margin: 10px 0 0 0;
       text-align: left;
     }
-    li {
-      margin: 5px 0;
+    .playlist li {
+      padding: 5px;
       cursor: pointer;
     }
-    li.active {
+    .playlist li.active {
       color: red;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h2>鄭丁培芳的歌</h2>
-  <div class="player">
-    <audio id="audio" controls></audio>
-
+  <h1>鄭丁培芳的歌</h1>
+  <div class="player-container">
+    <audio id="audioPlayer" controls>
+      <source src="song1.mp3" type="audio/mpeg">
+      您的瀏覽器不支援 audio 播放。
+    </audio>
     <div class="controls">
-      <div>
-        <button onclick="prevSong()">上一首</button>
-        <button onclick="togglePlay()">播放/暫停</button>
-        <button onclick="nextSong()">下一首</button>
-      </div>
-      <div>
-        <button class="stop-btn" onclick="stopSong()">Stop</button>
-      </div>
+      <button onclick="prevSong()">上一首</button>
+      <button onclick="stopSong()">Stop</button>
+      <button onclick="nextSong()">下一首</button>
     </div>
-
-    <ul id="playlist"></ul>
+    <ul class="playlist" id="playlist">
+      <li onclick="playSong(0)">心雨</li>
+      <li onclick="playSong(1)">第二首</li>
+      <li onclick="playSong(2)">藍色的夢</li>
+      <li onclick="playSong(3)">九九九朵紅</li>
+      <li onclick="playSong(4)">想着初見到你</li>
+      <li onclick="playSong(5)">希望</li>
+      <li onclick="playSong(6)">吹著春日風</li>
+      <li onclick="playSong(7)">給我一個吻</li>
+      <li onclick="playSong(8)">真的好想你</li>
+      <li onclick="playSong(9)">初戀女</li>
+      <li onclick="playSong(10)">日夜不想着你</li>
+      <li onclick="playSong(11)">玫瑰玫瑰我愛你</li>
+    </ul>
   </div>
 
   <script>
     const songs = [
-      { title: "心雨", src: "songs/song1.mp3" },
-      { title: "第二首", src: "songs/song2.mp3" },
-      { title: "藍色的夢", src: "songs/song3.mp3" },
-      { title: "九九九朵紅", src: "songs/song4.mp3" },
-      { title: "想著初見到你", src: "songs/song5.mp3" },
-      { title: "希望", src: "songs/song6.mp3" },
-      { title: "吹著春日風", src: "songs/song7.mp3" },
-      { title: "給我一個吻", src: "songs/song8.mp3" },
-      { title: "真的好想你", src: "songs/song9.mp3" },
-      { title: "初戀女", src: "songs/song10.mp3" },
-      { title: "日夜不想著你", src: "songs/song11.mp3" },
-      { title: "玫瑰玫瑰我愛你", src: "songs/song12.mp3" }
+      "song1.mp3","song2.mp3","song3.mp3","song4.mp3",
+      "song5.mp3","song6.mp3","song7.mp3","song8.mp3",
+      "song9.mp3","song10.mp3","song11.mp3","song12.mp3"
     ];
-
-    const audio = document.getElementById("audio");
-    const playlist = document.getElementById("playlist");
     let currentSong = 0;
+    const audioPlayer = document.getElementById("audioPlayer");
+    const playlist = document.getElementById("playlist").getElementsByTagName("li");
 
     function loadSong(index) {
+      audioPlayer.src = songs[index];
+      audioPlayer.play();
+      updateActive(index);
+    }
+    function playSong(index) {
       currentSong = index;
-      audio.src = songs[index].src;
-      audio.play();
-      updatePlaylist();
+      loadSong(index);
     }
-
-    function prevSong() {
-      currentSong = (currentSong - 1 + songs.length) % songs.length;
-      loadSong(currentSong);
-    }
-
     function nextSong() {
       currentSong = (currentSong + 1) % songs.length;
       loadSong(currentSong);
     }
-
+    function prevSong() {
+      currentSong = (currentSong - 1 + songs.length) % songs.length;
+      loadSong(currentSong);
+    }
     function stopSong() {
-      audio.pause();
-      audio.currentTime = 0;
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0; // 回到 0:00
+      updateActive(currentSong);
     }
-
-    function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+    function updateActive(index) {
+      for (let i = 0; i < playlist.length; i++) {
+        playlist[i].classList.remove("active");
       }
+      playlist[index].classList.add("active");
     }
-
-    function updatePlaylist() {
-      playlist.innerHTML = "";
-      songs.forEach((song, index) => {
-        const li = document.createElement("li");
-        li.textContent = (index + 1).toString().padStart(2, '0') + " " + song.title;
-        if (index === currentSong) li.classList.add("active");
-        li.onclick = () => loadSong(index);
-        playlist.appendChild(li);
-      });
-    }
-
     // 初始化
     loadSong(currentSong);
   </script>
